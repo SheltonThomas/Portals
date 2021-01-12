@@ -28,14 +28,16 @@ void UPortalComponent::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 	if (OverlapActors.Contains(OtherActor)) return;
 	OverlapActors.Add(OtherActor);
 	PortalLinkComp->OverlapActors.Add(OtherActor);
-	OtherActor->SetActorLocationAndRotation(PortalLink->GetActorLocation(), OtherActor->GetActorRotation());
+	FVector PositionOffset = OtherActor->GetActorLocation() - GetOwner()->GetActorLocation();
+	FVector PortalLinkPos = PortalLink->GetActorLocation();
+	FVector NewPosition = PortalLink->GetActorLocation() + PositionOffset;
+	OtherActor->SetActorLocationAndRotation(NewPosition, OtherActor->GetActorRotation());
 }
 
 void UPortalComponent::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	OverlapActors.Remove(OtherActor);
 }
-
 
 // Called every frame
 void UPortalComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
