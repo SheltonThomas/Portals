@@ -3,6 +3,8 @@
 
 #include "RotatingPortalComponent.h"
 #include "EngineUtils.h"
+#include "Kismet/GameplayStatics.h"
+#include "Camera/CameraComponent.h"
 
 void URotatingPortalComponent::BeginPlay()
 {
@@ -28,22 +30,24 @@ void URotatingPortalComponent::OnBeginOverlap(UPrimitiveComponent* OverlappedCom
 	if (OverlapActors.Contains(OtherActor)) return;
 
 	FRotator CurrentRot = OtherActor->GetActorRotation();
-	FRotator NewRot = OtherActor->GetActorRotation().Add(RotationRot.Pitch, RotationRot.Yaw, RotationRot.Roll);
+
+	FRotator TempRotation = RotationRot * NormalRotation;
+	FRotator NewRot = OtherActor->GetActorRotation().Add(TempRotation.Pitch, TempRotation.Yaw, TempRotation.Roll);
 	OverlapActors.Add(OtherActor);
 	PortalLinkComp->OverlapActors.Add(OtherActor);
 	FVector PositionOffset = OtherActor->GetActorLocation() - GetOwner()->GetActorLocation();
 	FVector PortalLinkPos = PortalLink->GetActorLocation();
 	FVector NewPosition = PortalLink->GetActorLocation() + PositionOffset;
 
-	if (OtherActor->GetName().Compare("FirstPersonCharacter_C")) {
-		NewRot = LevelActor->GetActorRotation().Add(RotationRot.Pitch, RotationRot.Yaw, RotationRot.Roll);
-		LevelActor->SetActorRotation(NewRot * NormalRotation);
+	if (OtherActor->GetComponentByClass(UCameraComponent::StaticClass())) {
+		NewRot = LevelActor->GetActorRotation().Add(TempRotation.Pitch, TempRotation.Yaw, TempRotation.Roll);
+		LevelActor->SetActorRotation(NewRot);
 		NewPosition = PortalLink->GetActorLocation() + PositionOffset;
 		OtherActor->SetActorLocation(NewPosition);
 	}
 	
 	else {
-		OtherActor->SetActorLocationAndRotation(NewPosition, NewRot * NormalRotation);
+		OtherActor->SetActorLocationAndRotation(NewPosition, NewRot);
 	}
 }
 

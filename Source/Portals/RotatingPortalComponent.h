@@ -35,5 +35,4 @@ protected:
     AActor* LevelActor = nullptr;
 
     int32 NormalRotation = 1;
-
 };
