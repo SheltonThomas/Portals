@@ -43,6 +43,8 @@ void UPortalComponent::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor*
 void UPortalComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	PortalView->TextureTarget = RenderTarget;
+	PortalView->CaptureScene();
 	// ...
 }
 
@@ -57,6 +59,12 @@ void UPortalComponent::PortalInit()
 			PortalLink = CurrentActor;
 			PortalLinkComp = PortalComponent;
 			BoxComp = Cast<UBoxComponent>(GetOwner()->GetComponentByClass(UBoxComponent::StaticClass()));
+			PortalMesh = Cast<UStaticMeshComponent>(GetOwner()->GetComponentByClass(UStaticMeshComponent::StaticClass()));
+			PortalMat = Cast<UMaterial>(PortalMesh->GetMaterial(0));
+			PortalView = Cast<USceneCaptureComponent2D>(GetOwner()->GetComponentByClass(USceneCaptureComponent2D::StaticClass()));
+			PortalView->TextureTarget = RenderTarget;
+
+			PortalMat->SetShadingModel(MSM_Unlit);
 		}
 	}
 }

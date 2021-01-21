@@ -3,6 +3,9 @@
 #pragma once
 
 #include "Components/BoxComponent.h"
+#include "Materials/Material.h"
+#include "Components/SceneCaptureComponent2D.h"
+#include "Engine/CanvasRenderTarget2D.h"
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "PortalComponent.generated.h"
@@ -17,17 +20,28 @@ public:
 	// Sets default values for this component's properties
 	UPortalComponent();
 
-	UPROPERTY(BlueprintReadWrite, Category = "Portal Info", EditAnywhere)
-		int64 PortalNumber = 0;
+	UPROPERTY(Category = "Portal Info", EditAnywhere)	
+	int64 PortalNumber = 0;
 
-	UPROPERTY(BlueprintReadWrite, Category = "Portal Info", EditAnywhere)
-		AActor* PortalLink = nullptr;
+	UPROPERTY(Category = "Portal Info", EditAnywhere)
+	UBoxComponent* BoxComp = nullptr;
 
-	UPROPERTY(BlueprintReadWrite, Category = "Portal Info", EditAnywhere)
-		UBoxComponent* BoxComp = nullptr;
+	UPROPERTY(Category = "Portal Info", EditAnywhere)
+	USceneCaptureComponent2D* PortalView = nullptr;
+
+	UPROPERTY(Category = "Portal Info", EditAnywhere)
+	UStaticMeshComponent* PortalMesh = nullptr;
+
+	UPROPERTY(Category = "Portal Info", EditAnywhere)
+	UMaterial* PortalMat;
+
+	UPROPERTY(Category = "Portal Info", EditAnywhere)
+	UCanvasRenderTarget2D* RenderTarget;
 
 	UPortalComponent* PortalLinkComp;
 	TArray<AActor*> OverlapActors;
+	AActor* PortalLink = nullptr;
+	
 
 protected:
 	// Called when the game starts
