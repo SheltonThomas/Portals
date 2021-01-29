@@ -16,7 +16,7 @@ class PORTALS_API UScalingPortalComponent : public UPortalComponent
 
 public:
 
-    UPROPERTY(Category = "Portal Info", EditAnywhere)
+    UPROPERTY(BlueprintReadWrite, Category = "Portal Info", EditAnywhere)
     FVector ScaleVector;
 
     UPROPERTY(Category = "Portal Info", EditAnywhere)

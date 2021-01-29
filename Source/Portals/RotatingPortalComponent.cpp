@@ -39,16 +39,15 @@ void URotatingPortalComponent::OnBeginOverlap(UPrimitiveComponent* OverlappedCom
 	FVector PortalLinkPos = PortalLink->GetActorLocation();
 	FVector NewPosition = PortalLink->GetActorLocation() + PositionOffset;
 
-	if (OtherActor->GetComponentByClass(UCameraComponent::StaticClass())) {
+	if (OtherActor->GetComponentByClass(UCharacterMovementComponent::StaticClass())) {
 		NewRot = LevelActor->GetActorRotation().Add(TempRotation.Pitch, TempRotation.Yaw, TempRotation.Roll);
 		LevelActor->SetActorRotation(NewRot);
 		NewPosition = PortalLink->GetActorLocation() + PositionOffset;
 		OtherActor->SetActorLocation(NewPosition);
 	}
 	
-	else {
+	else
 		OtherActor->SetActorLocationAndRotation(NewPosition, NewRot);
-	}
 }
 
 void URotatingPortalComponent::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)

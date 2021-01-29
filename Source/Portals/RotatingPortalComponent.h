@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "GameFramework/CharacterMovementComponent.h"
 #include "CoreMinimal.h"
 #include "PortalComponent.h"
 #include "RotatingPortalComponent.generated.h"
@@ -16,7 +17,7 @@ class PORTALS_API URotatingPortalComponent : public UPortalComponent
 
 public:
     
-    UPROPERTY(Category = "Portal Info", EditAnywhere)
+    UPROPERTY(BlueprintReadWrite, Category = "Portal Info", EditAnywhere)
     FRotator RotationRot;
 
     UPROPERTY(Category = "Portal Info", EditAnywhere)

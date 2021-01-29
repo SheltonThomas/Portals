@@ -4,12 +4,18 @@
 #include "ResetPortalComponent.h"
 #include "Kismet/GameplayStatics.h"
 
-void UResetPortalComponent::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void UResetPortalComponent::BeginPlay()
 {
-	UGameplayStatics::OpenLevel(GetWorld(), FName(*GetWorld()->GetName()));
+	if (LevelToLoad == "")
+		LevelToLoad = FName((*GetWorld()->GetName()));
+
+	BoxComp = Cast<UBoxComponent>(GetOwner()->GetComponentByClass(UBoxComponent::StaticClass()));
+	BoxComp->OnComponentBeginOverlap.AddDynamic(this, &UResetPortalComponent::OnBeginOverlap);
 }
 
-void UResetPortalComponent::AttachCollisionBehaviors()
+void UResetPortalComponent::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	BoxComp->OnComponentBeginOverlap.AddDynamic(this, &UResetPortalComponent::OnBeginOverlap);
+	if (OtherActor->GetComponentByClass(UCharacterMovementComponent::StaticClass()) || CanShootPortal) {
+		UGameplayStatics::OpenLevel(this, LevelToLoad);
+	}
 }
